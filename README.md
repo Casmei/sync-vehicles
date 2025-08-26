@@ -31,7 +31,7 @@ docker compose up
 - Localmente
 Após subir os containers, acesse:
 ```bash
-http://localhost:8000/docs
+http://localhost/docs/api
 ```
 *(Gerada com [Scramble](https://scramble.dedoc.co/))*  
 
@@ -112,6 +112,7 @@ Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limi
 *([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
 
 Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
 
 
 

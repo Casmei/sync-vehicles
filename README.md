@@ -48,7 +48,7 @@ Senha: carbel123
 
 Antes, é necessário você entrar dentro do container que está rodando a aplicação com esse comando:
 ```bash
-docker exec alpes-php bash
+docker exec -it alpes-php bash
 ```
 🔗 Em seguida, basta executar
 ```bash
@@ -112,6 +112,7 @@ Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limi
 *([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
 
 Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
 
 
 

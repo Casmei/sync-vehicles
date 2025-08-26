@@ -21,7 +21,7 @@ docker compose up
 
 ---
 
-📖 Documentação da API
+### 📖 Documentação da API
 - Localmente
 Após subir os containers, acesse:
 ```bash
@@ -32,6 +32,7 @@ http://localhost:8000/docs
 - Produção: [https://alpesone.kontact.com.br/docs/api](https://alpesone.kontact.com.br/docs/api)
 
 ---
+
 ### 🔧 Como rodar os testes
 
 ✅ Testes Unitários
@@ -43,4 +44,48 @@ php artisan test --testsuite=Unit
 Executa apenas os testes de integração, validando endpoints, autenticação e respostas da API:
 ```bash
 php artisan test --testsuite=Feature
+```
+
+---
+
+### 🚀 CI/CD
+
+Este projeto utiliza GitHub Actions para automação de testes e deploy:
+- Tests:
+    A cada push, é executada uma pipeline que roda os testes unitários e de integração via PHPUnit, garantindo a integridade do código.
+- Deploy to EC2:
+  Também em cada push, a aplicação é implantada automaticamente em uma instância EC2.
+  O workflow acessa o servidor via SSH, atualiza o código do repositório e executa docker compose up -d para aplicar as alterações.
+  
+---
+
+### Estrutura do projeto
+Um pequeno overview geral do projeto e suas camadas
+```
+app/
+├── Services
+│   ├── AuthService.php
+│   ├── LoadVehicleService.php
+│   └── VehicleService.php
+├── Repositories
+│   ├── UserRepository.php
+│   ├── VehicleRepository.php
+│   └── ... (Implementações concretas)
+├── Http/Controller/
+│   ├── AuthController.php
+│   └── VehicleController.php
+├── Models/
+│   ├── User.php
+│   └── Vehicle.php
+└── Console/Commands/
+    └── SyncExternalVehicles.php
+
+tests/
+├── Feature/
+│   ├── AuthControllerTest.php
+│   └── VehicleControllerTest.php
+└── Unit/
+    ├── AuthControllerTest.php
+    ├── LoadVehicleServiceTest.php
+    └── AuthServiceTest.php
 ```

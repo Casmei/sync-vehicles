@@ -2,6 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return ['msg' => 'Somente a api funciona'];
-});
+Route::get('/', fn() => ['msg' => 'Documentação: /docs/api 🚀']);

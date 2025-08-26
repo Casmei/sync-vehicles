@@ -42,8 +42,8 @@ jobs:
           git checkout -B "$BRANCH" "origin/$BRANCH" || git checkout "$BRANCH" || git checkout -b "$BRANCH"
           git pull --ff-only origin "$BRANCH"
 
-          # Se tiver submodules, descomente:
-          # git submodule update --init --recursive
+          docker compose up
+          
           set +x
           echo "Deploy ok em $REPO_DIR ($BRANCH)"
           EOF

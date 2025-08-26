@@ -37,19 +37,22 @@ http://localhost:8000/docs
 
 - Produção: [https://alpesone.kontact.com.br/docs/api](https://alpesone.kontact.com.br/docs/api)
 
+🔑 Usuário padrão para login:
+```makefile
+Email: julio.oliveira@alpes.one
+Senha: carbel123
+```
 ---
 
 ### 🔧 Como rodar os testes
 
-✅ Testes Unitários
-Executa apenas os testes unitários, responsáveis por validar regras de negócio e lógicas internas do sistema:
+Antes, é necessário você entrar dentro do container que está rodando a aplicação com esse comando:
 ```bash
-php artisan test --testsuite=Unit
+docker exec alpes-php bash
 ```
-🔗 Testes de Integração
-Executa apenas os testes de integração, validando endpoints, autenticação e respostas da API:
+🔗 Em seguida, basta executar
 ```bash
-php artisan test --testsuite=Feature
+php artisan test 
 ```
 
 ---
@@ -95,6 +98,7 @@ tests/
     ├── LoadVehicleServiceTest.php
     └── AuthServiceTest.php
 ```
+
 
 
 

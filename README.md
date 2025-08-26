@@ -8,6 +8,10 @@ com sincronização automática (via agendamento) com uma API externa. A autenti
 
 ---
 
+### 💻 Requisitos do sistema
+
+- Somente o docker e docker compose
+
 ### ▶️ Como rodar a aplicação localmente
 1. Clone o repositório:
 ```bash
@@ -42,6 +46,12 @@ http://localhost/docs/api
 Email: julio.oliveira@alpes.one
 Senha: carbel123
 ```
+
+⤵ Comando de sincronização
+```makefile
+php artisan vehicle:sync
+```
+
 ---
 
 ### 🔧 Como rodar os testes
@@ -112,6 +122,7 @@ Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limi
 *([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
 
 Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
 
 
 

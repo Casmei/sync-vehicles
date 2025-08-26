@@ -1,81 +1,128 @@
 services:
   composer:
-    image: rareloop/php-composer:php-8.2-cli-composer-2
+    image: composer:2
     container_name: alpes-composer
     working_dir: /var/www/html
-    user: www-data
     volumes:
       - ./:/var/www/html
-    command: sh -lc "composer install --no-interaction --prefer-dist --optimize-autoloader"
+      - composer_cache:/tmp/composer-cache
+    environment:
+      COMPOSER_CACHE_DIR: /tmp/composer-cache
+      COMPOSER_ALLOW_SUPERUSER: "1"
+    entrypoint: ["composer"]
+    command: ["install","--no-interaction","--prefer-dist","--optimize-autoloader"]
 
   artisan-setup:
-    image: rareloop/php-composer:php-8.2-cli-composer-2
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: alpes-artisan-setup
     working_dir: /var/www/html
-    user: www-data
-    volumes:
-      - ./:/var/www/html
+    user: root
     depends_on:
       composer:
         condition: service_completed_successfully
+    environment:
+      APP_ENV: production
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+    volumes:
+      - ./:/var/www/html:rw
+      - storage_data:/var/www/html/storage
+      - cache_data:/var/www/html/bootstrap/cache
     command: >
       sh -lc "
-      mkdir -p database &&
-      touch database/database.sqlite &&
-      chown -R www-data:www-data storage bootstrap/cache database &&
-      php artisan key:generate --force &&
-      php artisan migrate --seed --force
-      "
+        set -euo pipefail &&
+        [ -f .env ] || cp .env.example .env ;
 
-  # 3) App PHP-FPM (fica rodando)
-  alpes:
-    image: jkaninda/laravel-php-fpm
-    container_name: alpes
+        mkdir -p storage/app ;
+        mkdir -p storage/logs ;
+        mkdir -p storage/framework/cache/data ;
+        mkdir -p storage/framework/data ;
+        mkdir -p storage/framework/sessions ;
+        mkdir -p storage/framework/testing ;
+        mkdir -p storage/framework/views ;
+        mkdir -p bootstrap/cache ;
+
+        if grep -q '^DB_CONNECTION=sqlite' .env ; then
+          mkdir -p database ;
+          [ -f database/database.sqlite ] || touch database/database.sqlite ;
+        fi ;
+
+        chown -R www:www storage bootstrap/cache database || true ;
+        chmod -R ug+rwX storage bootstrap/cache ;
+
+        su -s /bin/sh -c 'php artisan key:generate --force' www ;
+        su -s /bin/sh -c 'php artisan migrate --force' www ;
+
+        if ls database/seeders/* 1> /dev/null 2>&1 ; then
+          su -s /bin/sh -c 'php artisan db:seed --force' www ;
+        fi ;
+
+        su -s /bin/sh -c 'php artisan config:cache && php artisan route:cache' www
+      "
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alpes-php
     restart: unless-stopped
-    user: www-data
-    volumes:
-      - ./:/var/www/html
+    user: www
+    working_dir: /var/www/html
+    environment:
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: "1"
     depends_on:
       artisan-setup:
         condition: service_completed_successfully
-    networks:
-      - default
+    volumes:
+      - ./:/var/www/html:rw
+      - storage_data:/var/www/html/storage
+      - cache_data:/var/www/html/bootstrap/cache
 
-  # 4) Worker do scheduler
-  alpes-worker:
-    image: rareloop/php-composer:php-8.2-cli-composer-2
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: alpes-worker
     restart: unless-stopped
-    depends_on:
-      alpes:
-        condition: service_started
-    user: www-data
+    user: www
     working_dir: /var/www/html
+    environment:
+      VIEW_COMPILED_PATH: /var/www/html/storage/framework/views
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+    depends_on:
+      app:
+        condition: service_started
     volumes:
-      - ./:/var/www/html
+      - ./:/var/www/html:rw
+      - storage_data:/var/www/html/storage
+      - cache_data:/var/www/html/bootstrap/cache
     command: php artisan schedule:work
-    networks:
-      - default
 
-  # 5) Nginx
-  nginx-server:
+  nginx:
     image: jkaninda/nginx-fpm:alpine
-    container_name: nginx-server
+    container_name: alpes-nginx
     restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_started
     ports:
       - "80:80"
-    volumes:
-      - ./:/var/www/html
     environment:
       - DOCUMENT_ROOT=/var/www/html/public
       - CLIENT_MAX_BODY_SIZE=20M
-      - PHP_FPM_HOST=alpes:9000
-    depends_on:
-      alpes:
-        condition: service_started
-    networks:
-      - default
+      - PHP_FPM_HOST=app:9000
+    volumes:
+      - ./:/var/www/html:ro
+      - storage_data:/var/www/html/storage:ro
+      - cache_data:/var/www/html/bootstrap/cache:ro
 
-networks:
-  default:
-    driver: bridge
+volumes:
+  storage_data:
+  cache_data:
+  composer_cache:

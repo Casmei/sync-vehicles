@@ -1,3 +1,6 @@
+[![Tests](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml/badge.svg)](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml)
+
+
 Este projeto é uma API desenvolvida em Laravel para gerenciar um CRUD de veículos,
 com sincronização automática (via agendamento) com uma API externa. A autenticação
 é feita utilizando Laravel Sanctum, garantindo segurança no acesso aos endpoints.
@@ -89,3 +92,4 @@ tests/
     ├── LoadVehicleServiceTest.php
     └── AuthServiceTest.php
 ```
+

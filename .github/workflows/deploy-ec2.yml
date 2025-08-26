@@ -24,8 +24,8 @@ jobs:
           set -Eeuo pipefail
           set -x
           REPO_DIR="$HOME/sync-vehicle"
-          BRANCH="main"  # troque para 'master' se for o caso
-          REMOTE_URL="https://github.com/SEU_USUARIO/SEU_REPO.git"  # público
+          BRANCH="main"
+          REMOTE_URL="https://github.com/Casmei/sync-vehicles.git"
 
           mkdir -p "$REPO_DIR"
           if [ -d "$REPO_DIR/.git" ]; then

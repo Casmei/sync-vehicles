@@ -106,6 +106,36 @@ tests/
 
 ---
 
+### ☁️ Deploy na Instância EC2
+
+A aplicação roda em uma instância EC2 t2.micro (AWS), utilizando apenas Docker e Docker Compose, sem dependências adicionais no servidor.
+
+*Passo a passo básico:*
+
+1. Acesse a instância via SSH, utilizando o IP público:
+```bash
+ssh -i sua-chave.pem ec2-user@52.15.226.119
+```
+2. Instale Docker e Docker Compose (se ainda não estiverem instalados).
+3. Clone o repositório:
+```bash
+git clone https://github.com/Casmei/sync-vehicles.git
+cd sync-vehicles
+```
+4. Ajuste permissões do Laravel para evitar erros de escrita em storage e bootstrap/cache:
+5. Suba os containers:
+```bash
+docker compose up -d
+```    
+6. Configuração de domínio:
+
+O Cloudflare foi configurado para apontar para o IP da instância, tornando o acesso mais simples.
+
+> 💡 Nota: Essa configuração de deploy foi feita de forma simples, apenas para disponibilizar rapidamente a aplicação. Não sei se é a forma mais recomendada, pois a parte de infraestrutura ainda é um tema que estou estudando e buscando melhorar.
+
+
+---
+
 ### 📝 Observações sobre o Desenvolvimento
 O teste foi iniciado em um domingo, quando a API oficial de exportação ainda não estava disponível.
 Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limiting (Throttler), que serviu como fonte de dados temporária.
@@ -117,6 +147,7 @@ Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limi
 *([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
 
 Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
 
 
 

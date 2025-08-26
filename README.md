@@ -99,6 +99,21 @@ tests/
     └── AuthServiceTest.php
 ```
 
+---
+
+### 📝 Observações sobre o Desenvolvimento
+O teste foi iniciado em um domingo, quando a API oficial de exportação ainda não estava disponível.
+Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limiting (Throttler), que serviu como fonte de dados temporária.
+
+🔗 Repositório da API mock:
+*([https://github.com/Casmei/vehicle-export](https://github.com/Casmei/vehicle-export))*
+
+🌐 Deploy da API mock:
+*([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
+
+Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
+
 
 
 

@@ -5,10 +5,8 @@ on: [push]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -20,14 +18,32 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      # ⬇️ Apenas entra na EC2, vai para sync-vehicle e dá git pull
-      - name: SSH into EC2 and git pull
+      - name: SSH into EC2 and pull
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          set -e
-          cd ~/sync-vehicle
-          git fetch --all
+          set -Eeuo pipefail
+          set -x
+          REPO_DIR="$HOME/sync-vehicle"
+          BRANCH="main"  # troque para 'master' se for o caso
+          REMOTE_URL="https://github.com/SEU_USUARIO/SEU_REPO.git"  # público
 
-          git checkout main || true
-          git pull origin main
+          mkdir -p "$REPO_DIR"
+          if [ -d "$REPO_DIR/.git" ]; then
+            cd "$REPO_DIR"
+            git remote set-url origin "$REMOTE_URL" || true
+          else
+            cd "$REPO_DIR"
+            git init
+            git remote add origin "$REMOTE_URL"
+          fi
+
+          git config --global --add safe.directory "$REPO_DIR"
+          git fetch --all --prune
+          git checkout -B "$BRANCH" "origin/$BRANCH" || git checkout "$BRANCH" || git checkout -b "$BRANCH"
+          git pull --ff-only origin "$BRANCH"
+
+          # Se tiver submodules, descomente:
+          # git submodule update --init --recursive
+          set +x
+          echo "Deploy ok em $REPO_DIR ($BRANCH)"
           EOF

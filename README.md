@@ -1,5 +1,6 @@
-[![Tests](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml/badge.svg)](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml)
+#Laravel Vehicle Sync
 
+[![Tests](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml/badge.svg)](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml)
 
 Este projeto é uma API desenvolvida em Laravel para gerenciar um CRUD de veículos,
 com sincronização automática (via agendamento) com uma API externa. A autenticação
@@ -16,6 +17,8 @@ git clone https://github.com/Casmei/sync-vehicles.git
 ```bash
 cd sync-vehicles
 ```
+🔹 Pequena observação, a variável de ambiente API_ALPESONE já está adicionada ao .env.example, logo, não é necessário nenhuma alteração no .env
+
 3. Suba os serviços com Docker
 ```bash
 docker compose up
@@ -92,4 +95,5 @@ tests/
     ├── LoadVehicleServiceTest.php
     └── AuthServiceTest.php
 ```
+
 

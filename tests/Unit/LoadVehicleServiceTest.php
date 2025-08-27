@@ -25,7 +25,7 @@ class LoadVehicleServiceTest extends TestCase
     }
 
     /**
-     * Helper para simular item externo (payload de API) já no novo formato.
+     * Helper para simular item externo (payload de API).
      */
     private function extVehicle(array $overrides = []): array
     {

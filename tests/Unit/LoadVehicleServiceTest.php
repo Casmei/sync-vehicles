@@ -59,7 +59,7 @@ class LoadVehicleServiceTest extends TestCase
     }
 
     /**
-     * Helper para seed local (repo) no novo formato.
+     * Helper para seed local (repo).
      */
     private function localVehicle(array $overrides = []): array
     {

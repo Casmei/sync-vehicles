@@ -1,3 +1,5 @@
+![README COVER](./4.png)
+
 # Laravel Vehicle Sync
 
 [![Tests](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml/badge.svg)](https://github.com/Casmei/sync-vehicles/actions/workflows/larave-teste.yml)
@@ -147,6 +149,7 @@ Para não atrasar o desenvolvimento, criei uma API mock em Nest.js com rate limi
 *([https://vxport.kontact.com.br/vehicles/export](https://vxport.kontact.com.br/vehicles/export))*
 
 Estou totalmente disponível para esclarecer qualquer dúvida sobre essa decisão ou sobre a implementação.
+
 
 
 
